@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3000;
 
 const db = require("../models");
+const { exercise } = require("../models");
 
 const app = express();
 
@@ -24,6 +25,36 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessappdb", 
 //   .catch(({ message }) => {
 //     console.log(message);
 //   });
+
+  // db.exercise.create([{ name: "toes" },{ type: "lower body" },{ weight: 5 },{ sets: 4 },{ reps: 2 },{ distance: 0 },{ duration: 1 }])
+  // .then(dbexercise => {
+  //   console.log(dbexercise);
+  // })
+  // .catch(({ message }) => {
+  //   console.log(message);
+  // });
+
+app.get("/workout", (req, res) => {
+  db.workout.find({})
+    .then(dbworkout => {
+      res.json(dbworkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+app.get("/exercise", (req, res) => {
+  db.exercise.find({})
+    .then(dbexercise => {
+      res.json(dbexercise);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
