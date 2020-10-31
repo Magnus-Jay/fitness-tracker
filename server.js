@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;
 
-const db = require("../models");
-const { exercise } = require("../models");
+const db = require("./models");
 
 const app = express();
 
@@ -48,6 +47,17 @@ app.get("/exercise", (req, res) => {
   db.exercise.find({})
     .then(dbexercise => {
       res.json(dbexercise);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+app.post("/submit", ({ body }, res) => {
+  db.exercise.create(body)
+    .then(({ _id }) => db.workout.findOneAndUpdate({}, { $push: { exercise: _id } }, { new: true }))
+    .then(dbworkout => {
+      res.json(dbworkout);
     })
     .catch(err => {
       res.json(err);
